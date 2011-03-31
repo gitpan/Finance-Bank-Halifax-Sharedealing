@@ -1,7 +1,7 @@
 --- #YAML:1.0
 name:               Finance-Bank-Halifax-Sharedealing
-version:            0.01
-abstract:           Perl module for accessing a Halifax
+version:            0.02
+abstract:           access Halifax Sharedealing accounts from Perl.
 author:
     - Rayner Lucas <cpan@magic-cookie.co.uk>
 license:            perl

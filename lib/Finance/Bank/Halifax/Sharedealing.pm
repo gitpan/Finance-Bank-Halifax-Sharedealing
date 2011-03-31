@@ -8,16 +8,15 @@ use WWW::Mechanize;
 
 =head1 NAME
 
-Finance::Bank::Halifax::Sharedealing - Perl module for accessing a Halifax
-Sharedealing account.
+Finance::Bank::Halifax::Sharedealing - access Halifax Sharedealing accounts from Perl.
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -32,6 +31,7 @@ our $VERSION = '0.01';
         security_school_name => 'Somewheretown Primary School',
         security_birthplace => 'Somewheretown',
     );
+
     $sd->log_in();
 
     # Get the user's accounts and print a brief statement for each one.
@@ -51,6 +51,7 @@ our $VERSION = '0.01';
         }
         print "\n";
     }
+
     $sd->log_out();
 
 =head1 DESCRIPTION
@@ -60,7 +61,7 @@ service at L<https://www.halifaxsharedealing-online.co.uk/>. It requires
 C<WWW::Mechanize>, C<HTML::TokeParser>, and either C<Crypt::SSLeay> or
 C<IO::Socket::SSL>.
 
-=head1 SUBROUTINES/METHODS
+=head1 METHODS
 
 =cut
 
@@ -124,7 +125,7 @@ sub new {
 }
 
 
-=head2 log_in
+=head2 log_in()
 
 Log in, using the security details that were passed to C<new()>. This will
 set the currently-selected account to the user's default account.
@@ -171,7 +172,7 @@ sub log_in {
 }
 
 
-=head2 log_out
+=head2 log_out()
 
 Log out by clicking the 'Sign Out' button.
 
@@ -190,11 +191,12 @@ sub log_out {
 }
 
 
-=head2 get_all_accounts
+=head2 get_all_accounts()
 
 Get all the accounts that can be managed from this user's login.
 
-Returns a hash of account IDs and account names.
+Returns a hash with account IDs (e.g. "D12345678") as the keys, and account 
+names (e.g. "MR J SMITH, Halifax ShareBuilder 01") as the values.
 
 =cut
 
@@ -243,7 +245,7 @@ sub get_all_accounts {
 
 Set or change the account we're using.
 
-$account: the account ID of the account to switch to.
+C<$account>: the account ID of the account to switch to.
 
 Returns true if the account was successfully set, otherwise false.
 
@@ -264,7 +266,7 @@ sub set_account {
 }
 
 
-=head2 get_account
+=head2 get_account()
 
 Get the ID of the account we're currently using.
 
@@ -280,21 +282,22 @@ sub get_account {
 }
 
 
-=head2 get_portfolio
+=head2 get_portfolio()
 
 Get a portfolio statement for the currently-selected account.
 
 Returns an array. Each element of the array is a hash with the keys:
-  symbol: the ticker symbol of the stock.
-  exchange: the exchange on which the stock is listed.
-  quantity: the number of shares owned.
-  avg_cost: the average cost per share (in pence).
-  latest_price: the latest quoted price per share (in pence).
-  change: result of subtracting avg_cost from latest_price (in pence)
-  book_cost: total cost of the holding (in pounds)
-  valuation: value of the holding at the latest market price (in pounds).
-  profit_loss_absolute: the profit or loss on the holding in pounds.
-  profit_loss_percent: the profit or loss on the holding in percent.
+
+ symbol: the ticker symbol of the stock.
+ exchange: the exchange on which the stock is listed.
+ quantity: the number of shares owned.
+ avg_cost: the average cost per share (in pence).
+ latest_price: the latest quoted price per share (in pence).
+ change: result of subtracting avg_cost from latest_price (in pence)
+ book_cost: total cost of the holding (in pounds)
+ valuation: value of the holding at the latest market price (in pounds).
+ profit_loss_absolute: the profit or loss on the holding in pounds.
+ profit_loss_percent: the profit or loss on the holding in percent.
 
 All hash values are the raw contents of the data cell - you should not assume
 that any of them will be valid numbers.
@@ -364,7 +367,7 @@ sub get_portfolio {
 }
 
 
-=head2 get_available_cash
+=head2 get_available_cash()
 
 Get the uninvested cash balance for the currently-selected account.
 
@@ -408,7 +411,7 @@ sub get_available_cash {
 # Private methods #
 ###################
 
-# _get_url_without_account_code
+# _get_url_without_account_code()
 #
 # Given a URL from the share dealing site (after logging in), return it
 # without the account code on the end.
@@ -428,7 +431,7 @@ sub _get_url_without_account_code {
   return $base;
 }
 
-# _get_account_from_url
+# _get_account_from_url()
 #
 # Given a URL from the share dealing site (after logging in), return the
 # account code from it. Returns an empty string if no account code could
